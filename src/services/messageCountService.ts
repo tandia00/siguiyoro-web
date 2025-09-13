@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { notificationService } from './notificationService';
 
 export interface UnreadCount {
   conversationKey: string;
@@ -242,7 +243,13 @@ class MessageCountService {
             const senderName = senderResult.data?.full_name || 'Utilisateur inconnu';
             const propertyTitle = propertyResult.data?.title || 'Propriété inconnue';
             
-            // La logique de notification a été supprimée pour corriger le crash sur iOS
+            // Notifier l'utilisateur uniquement si les permissions sont accordées
+            if (notificationService.getPermissionStatus() === 'granted') {
+              notificationService.showNotification(`Nouveau message de ${senderName}`, {
+                body: message.content,
+                tag: `message-${message.property_id}`
+              });
+            }
           }
         }
         
