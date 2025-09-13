@@ -10,23 +10,33 @@ export const useNotifications = () => {
   const userIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!user || !notificationService.isSupported()) return;
+    // Ne rien faire si les notifications ne sont pas supportées
+    if (!notificationService.isSupported()) return;
 
-    // Réinitialiser si l'utilisateur a changé
-    if (userIdRef.current !== user.id) {
-      userIdRef.current = user.id;
-      welcomeNotificationSent.current = false;
-    }
+    const checkAndRequestPermission = () => {
+      if (!user) return;
 
-    // Vérifier la permission actuelle
-    const currentPermission = notificationService.getPermissionStatus();
-    setHasPermission(currentPermission === 'granted');
+      // Réinitialiser si l'utilisateur a changé
+      if (userIdRef.current !== user.id) {
+        userIdRef.current = user.id;
+        welcomeNotificationSent.current = false;
+      }
 
-    // Demander la permission automatiquement seulement sur les appareils non-mobiles pour éviter de bloquer l'UI
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (currentPermission === 'default' && !permissionRequested && !isMobile) {
-      requestPermission();
-    }
+      // Vérifier la permission actuelle
+      const currentPermission = notificationService.getPermissionStatus();
+      setHasPermission(currentPermission === 'granted');
+
+      // Demander la permission automatiquement seulement sur les appareils non-mobiles
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (currentPermission === 'default' && !permissionRequested && !isMobile) {
+        requestPermission();
+      }
+    };
+
+    // Exécuter après le montage du composant pour éviter les erreurs sur Safari
+    const timeoutId = setTimeout(checkAndRequestPermission, 100);
+
+    return () => clearTimeout(timeoutId);
   }, [user, permissionRequested]);
 
   const requestPermission = async () => {
