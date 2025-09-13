@@ -275,9 +275,9 @@ const HomeScreen: React.FC = () => {
             <p className="text-gray-400">Essayez de modifier vos critères de recherche</p>
           </div>
         ) : (
-          <div className={`grid gap-4 ${ // Augmentation du gap pour un meilleur espacement
+          <div className={`grid gap-2 ${
             viewMode === 'grid' 
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full' // 1 colonne sur mobile, 2 sur tablette, 3 sur desktop
+              ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full'
               : 'grid-cols-1'
           }`}>
             {filteredProperties.map((property) => (
