@@ -22,8 +22,9 @@ export const useNotifications = () => {
     const currentPermission = notificationService.getPermissionStatus();
     setHasPermission(currentPermission === 'granted');
 
-    // Demander la permission automatiquement si pas encore demandée
-    if (currentPermission === 'default' && !permissionRequested) {
+    // Demander la permission automatiquement seulement sur les appareils non-mobiles pour éviter de bloquer l'UI
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (currentPermission === 'default' && !permissionRequested && !isMobile) {
       requestPermission();
     }
   }, [user, permissionRequested]);
