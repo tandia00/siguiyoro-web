@@ -65,9 +65,9 @@ const HomeScreen: React.FC = () => {
       title: property.title
     });
 
-    const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         property.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         property.address?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (property.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (property.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (property.address || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesCity = !selectedCity || property.city === selectedCity;
     
@@ -275,9 +275,9 @@ const HomeScreen: React.FC = () => {
             <p className="text-gray-400">Essayez de modifier vos critères de recherche</p>
           </div>
         ) : (
-          <div className={`grid gap-2 ${
+          <div className={`grid gap-4 ${ // Augmentation du gap pour un meilleur espacement
             viewMode === 'grid' 
-              ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3 w-full'
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full' // 1 colonne sur mobile, 2 sur tablette, 3 sur desktop
               : 'grid-cols-1'
           }`}>
             {filteredProperties.map((property) => (
