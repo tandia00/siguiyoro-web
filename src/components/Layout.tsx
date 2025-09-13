@@ -3,8 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { User as AppUser } from '../contexts/AuthContext';
 import logo from '../assets/Sigui (2).jpg';
-import NotificationCenter from './NotificationCenter';
-import { useNotifications } from '../hooks/useNotifications';
 import { 
   Home, 
   MessageSquare, 
@@ -13,7 +11,6 @@ import {
   Plus,
   Heart,
   Search,
-  Bell,
   Shield,
   Users as UsersIcon
 } from 'lucide-react';
@@ -26,18 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { requestPermission } = useNotifications();
 
-  // Initialiser les notifications au chargement
-  useEffect(() => {
-    if (user) {
-      // Vérifier si les permissions sont déjà accordées avant de demander
-      const currentPermission = Notification.permission;
-      if (currentPermission === 'default') {
-        requestPermission();
-      }
-    }
-  }, [user, requestPermission]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -101,7 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <span>Ajouter</span>
               </Link>
 
-              <NotificationCenter />
+              {/* Notification Center Removed */}
 
               <Link to="/profile" className="flex items-center space-x-3 hover:bg-gray-50 p-2 rounded-lg transition-colors">
                 <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
