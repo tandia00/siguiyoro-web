@@ -1,5 +1,4 @@
 import { supabase } from '../lib/supabase';
-import { notificationService } from './notificationService';
 
 export interface UnreadCount {
   conversationKey: string;
@@ -243,11 +242,7 @@ class MessageCountService {
             const senderName = senderResult.data?.full_name || 'Utilisateur inconnu';
             const propertyTitle = propertyResult.data?.title || 'Propriété inconnue';
             
-            await notificationService.notifyNewMessage(
-              senderName,
-              message.content,
-              propertyTitle
-            );
+            // La logique de notification a été supprimée pour corriger le crash sur iOS
           }
         }
         
