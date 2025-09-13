@@ -14,9 +14,16 @@ class NotificationService {
   private permission: NotificationPermission = 'default';
   private notifications: NotificationData[] = [];
   private listeners: ((notifications: NotificationData[]) => void)[] = [];
+  private isMobileDevice: boolean;
 
   constructor() {
-    this.initializePermission();
+    // Détecter les appareils mobiles
+    this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // N'initialiser les notifications que sur desktop
+    if (!this.isMobileDevice) {
+      this.initializePermission();
+    }
   }
 
   // Initialiser les permissions de notification
@@ -50,6 +57,11 @@ class NotificationService {
 
   // Afficher une notification browser
   async showBrowserNotification(title: string, options: NotificationOptions = {}) {
+    // Ne pas afficher de notifications sur mobile
+    if (this.isMobileDevice || !this.isSupported()) {
+      return;
+    }
+
     if (this.permission !== 'granted') {
       console.warn('[NotificationService] Permission refusée pour les notifications');
       return;
@@ -222,6 +234,10 @@ class NotificationService {
 
   // Vérifier si les notifications sont supportées
   isSupported(): boolean {
+    // Désactiver complètement sur mobile pour éviter les crashes
+    if (this.isMobileDevice) {
+      return false;
+    }
     return typeof window !== 'undefined' && 'Notification' in window;
   }
 
