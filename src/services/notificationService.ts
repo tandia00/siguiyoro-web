@@ -20,8 +20,8 @@ class NotificationService {
   }
 
   // Initialiser les permissions de notification
-  private async initializePermission() {
-    if ('Notification' in window) {
+  private initializePermission() {
+    if (this.isSupported()) {
       this.permission = Notification.permission;
       console.log('[NotificationService] Permission actuelle:', this.permission);
     }
@@ -222,12 +222,15 @@ class NotificationService {
 
   // Vérifier si les notifications sont supportées
   isSupported(): boolean {
-    return 'Notification' in window;
+    return typeof window !== 'undefined' && 'Notification' in window;
   }
 
   // Obtenir le statut de permission
   getPermissionStatus(): NotificationPermission {
-    return this.permission;
+    if (this.isSupported()) {
+        return Notification.permission;
+    }
+    return 'denied'; // Retourner 'denied' si non supporté
   }
 }
 
