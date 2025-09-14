@@ -14,6 +14,7 @@ import {
   Shield,
   Users as UsersIcon
 } from 'lucide-react';
+import NotificationCenter from './NotificationCenter';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -87,7 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <span>Ajouter</span>
               </Link>
 
-              {/* Notification Center Removed */}
+              <NotificationCenter />
 
               <Link to="/profile" className="flex items-center space-x-3 hover:bg-gray-50 p-2 rounded-lg transition-colors">
                 <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">

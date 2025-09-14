@@ -243,7 +243,14 @@ class MessageCountService {
             const senderName = senderResult.data?.full_name || 'Utilisateur inconnu';
             const propertyTitle = propertyResult.data?.title || 'Propriété inconnue';
             
-            // Notifier l'utilisateur uniquement si les permissions sont accordées
+            // Créer une notification in-app
+            notificationService.addInAppNotification({
+              title: `Nouveau message de ${senderName}`,
+              body: message.content,
+              link: `/chat/${message.property_id}/${message.sender_id}`
+            });
+
+            // Envoyer une notification push si les permissions sont accordées
             if (notificationService.getPermissionStatus() === 'granted') {
               notificationService.showNotification(`Nouveau message de ${senderName}`, {
                 body: message.content,
